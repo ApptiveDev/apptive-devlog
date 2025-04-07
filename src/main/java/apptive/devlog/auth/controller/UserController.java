@@ -54,10 +54,30 @@ public class UserController {
      */
     @PostMapping("/signup")
     public String signup(@Validated @ModelAttribute("user") UserSaveForm form, BindingResult bindingResult){
-        // 검증 처리
+        // 이메일 중복 체크
+        if(form.getEmail() != null){
+            if(userService.isEmailDuplicated(form.getEmail())){
+                bindingResult.rejectValue("email", "duplicated", "이미 가입된 이메일입니다.");
+            }
+        }
 
+        // 닉네임 중복 체크
+        if(form.getNickname() != null){
+            if(userService.isNicknameDuplicated(form.getNickname())){
+                bindingResult.rejectValue("nickname", "duplicated", "이미 사용 중인 닉네임입니다.");
+            }
+        }
+
+        // Validation
+        if(bindingResult.hasErrors()){
+            log.info("errors = {}", bindingResult);
+
+            return "/users/home";
+        }
 
         // 성공 로직
+        User user = new User(form);
+        userService.signup(user);
 
         return "redirect:/users/home";
     }
@@ -82,7 +102,16 @@ public class UserController {
      */
     @PostMapping("login")
     public String login(@Validated @ModelAttribute("user") UserLoginForm form, BindingResult bindingResult){
-        // 검증 구현 필요
+        // 1차 유효성 검사
+        if(bindingResult.hasErrors()){
+            log.info("errors = {}", bindingResult);
+
+            return "users/login";
+        }
+
+        User user = new User(form);
+
+        //로그인 처리
 
         return "redirect:/main";
     }

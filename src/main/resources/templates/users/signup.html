@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../../static/css/bootstrap.min.css" rel="stylesheet">
+    <title>Title</title>
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>회원가입</h2>
+    </div>
+
+    <form action="/users/signup" th:object="${user}" method="post">
+        <!-- 이메일 -->
+        <div>
+            <label for="email">이메일</label>
+            <input type="email" id="email" th:field="*{email}"
+                   th:errorclass="field-error"
+                   class="form-control" placeholder="이메일 입력">
+            <div class="field-error" th:erros="*{email}">
+                이메일 오류
+            </div>
+        </div>
+
+        <!-- 비밀번호 -->
+        <div>
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" th:field="*{password}"
+                   th:errorclass="field-error"
+                   class="form-control" placeholder="비밀번호 입력">
+            <div class="field-error" th:erros="*{password}">
+                비밀번호 오류
+            </div>
+        </div>
+
+        <!-- 이름 -->
+        <div>
+            <label for="name">이름</label>
+            <input type="text" id="name" th:field="${name}"
+                   th:errorclass="field-error"
+                   class="form-control" placeholder="이름 입력">
+            <div class="field-error" th:erros="*{name}">
+                이름 오류
+            </div>
+        </div>
+
+        <!-- 닉네임 -->
+        <div>
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" th:field="${nickname}"
+                   th:errorclass="field-error"
+                   class="form-control" placeholder="닉네임 입력">
+            <div class="field-error" th:erros="*{nickname}">
+                닉네임 오류
+            </div>
+        </div>
+
+        <!-- 생년월일 -->
+        <div>
+            <label for="birth">생년월일</label>
+            <input type="date" id="birth" th:field="${birth}"
+                   th:errorclass="field-error"
+                   class="form-control">
+            <div class="field-error" th:erros="*{birth}">
+                생년월일 오류
+            </div>
+        </div>
+
+        <!-- 성별 -->
+        <div>
+            <label>성별</label><br>
+            <input type="radio" id="male" name="gender"
+                   th:errorclass="field-error"
+                   th:field="*{gender}" value="male">
+            <label for="male">남</label>
+
+            <input type="radio" id="female" name="gender"
+                   th:errorclass="field-error"
+                   th:field="*{gender}" value="female">
+            <label for="female">여</label>
+            <div class="field-error" th:erros="*{gender}">
+                성별 오류
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">회원가입</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='home.html'"
+                        th:onclick="|location.href='@{/users/home}'|"
+                        type="button">취소</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
