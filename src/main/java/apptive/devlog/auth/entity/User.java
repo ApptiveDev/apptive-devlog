@@ -45,6 +45,7 @@ public class User {
         this.gender = gender;
     }
 
+    // 생성자 필요서 다시 생각해보기
     public User(UserLoginForm form){
         this.email = form.getEmail();
         this.password = form.getPassword();

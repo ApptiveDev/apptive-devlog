@@ -5,16 +5,16 @@ import apptive.devlog.auth.dto.UserLoginForm;
 import apptive.devlog.auth.dto.UserSaveForm;
 import apptive.devlog.auth.entity.User;
 import apptive.devlog.auth.service.UserService;
+import apptive.devlog.auth.session.SessionConst;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -29,10 +29,16 @@ public class UserController {
      * @return
      */
     @GetMapping
-    public String loginHome(Model model){
-        //model.addAttribute("user", new User());
+    public String loginHome(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) UserLoginForm loginUser, Model model){
 
-        return "users/home";
+        // 세션 정보가 있으면 유저 정보 표기
+        if(loginUser == null){
+            return "users/home";
+        }
+        else{
+            model.addAttribute("userLoginForm", loginUser);
+            return "users/userHome";
+        }
     }
 
     /**
@@ -100,8 +106,8 @@ public class UserController {
      * @param bindingResult
      * @return
      */
-    @PostMapping("login")
-    public String login(@Validated @ModelAttribute("user") UserLoginForm form, BindingResult bindingResult){
+    @PostMapping("/login")
+    public String login(@Validated @ModelAttribute("user") UserLoginForm form, BindingResult bindingResult, HttpServletRequest request){
         // 1차 유효성 검사
         if(bindingResult.hasErrors()){
             log.info("errors = {}", bindingResult);
@@ -109,10 +115,20 @@ public class UserController {
             return "users/login";
         }
 
-        User user = new User(form);
+        // 로그인 처리
+        HttpSession session = request.getSession();
+        session.setAttribute(SessionConst.LOGIN_USER, form);
 
-        //로그인 처리
+        return "redirect:/main";
+    }
 
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+
+        if(session != null){
+            session.invalidate();
+        }
         return "redirect:/main";
     }
 }

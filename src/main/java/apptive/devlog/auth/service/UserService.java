@@ -15,6 +15,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User login(String email, String password){
+        return userRepository.findByEmail(email)
+                .filter(m->m.getPassword().equals(password))
+                .orElse(null);
+    }
+
     public boolean isEmailDuplicated(String email){
         // 중복 체크
 
