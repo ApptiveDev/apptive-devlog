@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+src/main/resources/application-secret.properties
+src/main/resources/keystore.p12
+docker-compose.yml
+src/test/resources/application-secret.properties
+init.sql
+Dockerfile
