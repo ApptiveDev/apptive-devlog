@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Security ###
+/src/main/resources/application-aws.properties
+/src/main/resources/application.properties

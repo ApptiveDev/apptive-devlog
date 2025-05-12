@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -27,15 +28,16 @@ public class ReissueController {
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
-        String refresh = null;
+
+        if (request.getCookies() == null)  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "리프래시 토큰이 존재하지 않습니다"));
 
         Cookie[] cookies = request.getCookies();
 
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("refresh")) {
-                refresh = cookie.getValue();
-            }
-        }
+        String refresh = Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equals("refresh"))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse(null);
 
         if (refresh == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "리프래시 토큰이 존재하지 않습니다"));

@@ -6,13 +6,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
 
     private String email;
@@ -28,7 +31,17 @@ public class Member {
     private String role;
 
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private Gender gender; //enum 값 검증 필요
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UploadFile> uploadFiles = new ArrayList<>();
+
 
     public Member(String email, String password, String username, String nickname, LocalDate birthdate, String role, Gender gender) {
         this.email = email;

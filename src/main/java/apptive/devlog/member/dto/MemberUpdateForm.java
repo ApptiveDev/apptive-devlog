@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class UpdateForm {
+public class MemberUpdateForm {
 
 
     @NotBlank(message = "별명을 입력해주세요")
@@ -48,7 +48,7 @@ public class UpdateForm {
     private Gender gender;
 
 
-    public UpdateForm(String nickname, String currentPassword, String newPassword, String confirmPassword, LocalDate birthdate, Gender gender) {
+    public MemberUpdateForm(String nickname, String currentPassword, String newPassword, String confirmPassword, LocalDate birthdate, Gender gender) {
         this.nickname = nickname;
         this.currentPassword = currentPassword;
         this.newPassword = newPassword;
@@ -57,6 +57,6 @@ public class UpdateForm {
         this.gender = gender;
     }
 
-    protected UpdateForm() {}
+    protected MemberUpdateForm() {}
 
 }

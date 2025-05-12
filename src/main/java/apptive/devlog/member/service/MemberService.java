@@ -1,10 +1,12 @@
 package apptive.devlog.member.service;
 
 import apptive.devlog.domain.Member;
+import apptive.devlog.domain.UploadFile;
 import apptive.devlog.error.ErrorMessage;
+import apptive.devlog.fileupload.service.UploadService;
 import apptive.devlog.member.dto.JoinForm;
 import apptive.devlog.member.dto.MemberDetails;
-import apptive.devlog.member.dto.UpdateForm;
+import apptive.devlog.member.dto.MemberUpdateForm;
 import apptive.devlog.member.exception.DuplicateMemberException;
 import apptive.devlog.member.exception.NotFoundMemberException;
 import apptive.devlog.member.exception.PasswordException;
@@ -29,6 +31,7 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final RefreshRepository refreshRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UploadService uploadService;
 
     @Override
     public UserDetails loadUserByUsername(String email)  {
@@ -58,9 +61,10 @@ public class MemberService implements UserDetailsService {
         memberRepository.save(member);
     }
 
-    public void update(String email, UpdateForm form) {
+    public void update(String email, MemberUpdateForm form) {
         Member findMember = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundMemberException("존재하는 회원이 없습니다"));
+
 
         Map<String, String> errors = new HashMap<>();
 
@@ -82,12 +86,14 @@ public class MemberService implements UserDetailsService {
 
     public void withdraw(String email) {
 
-        memberRepository.findByEmail(email)
+        Member findMember = memberRepository.findByEmailWithFiles(email)
                 .orElseThrow(() -> new NotFoundMemberException("존재하는 회원이 없습니다"));
 
-        memberRepository.deleteByEmail(email);
+        uploadService.deleteFiles(findMember.getUploadFiles());
 
-        if (refreshRepository.existsByEmail(email)) refreshRepository.deleteByRefresh(email);
+        memberRepository.delete(findMember);
+
+        if (refreshRepository.existsByEmail(email)) refreshRepository.deleteByEmail(email);
 
     }
 }

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,9 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -32,7 +35,6 @@ public class WebSecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,8 +62,9 @@ public class WebSecurityConfig {
         // jwt방식을 사용할때는 위 3가지를 disable 시켜줘야한다.
 
         http.authorizeHttpRequests((auth)->
-                auth.requestMatchers("/login", "/signup", "/reissue").permitAll()
-                        .requestMatchers("/home").hasRole("MEMBER") //ROLE_MEMBER
+                auth.requestMatchers(permitPaths).permitAll()
+                        .requestMatchers("/users/me/**").authenticated()
+                        .requestMatchers("/home").hasRole("MEMBER")//ROLE_MEMBER
                         .anyRequest().authenticated());
 
         http.sessionManagement((session) -> session
@@ -80,6 +83,7 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
@@ -89,6 +93,17 @@ public class WebSecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    private final String[] permitPaths = {"/login", "/users", "/reissue", "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/users/post/*",
+            "/users/comment/*",
+            "/upload",
+            "/file/upload",
+            "/users/*/post/**"};
 
 
 }

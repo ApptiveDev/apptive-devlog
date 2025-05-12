@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.*;
+
 @Slf4j
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -41,11 +43,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         LoginForm loginForm = new LoginForm();
-
+        //@RequestBody기능을 사용할 수 없기 때문에 직접 문자열을 Json으로 파싱해줘야함
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             ServletInputStream inputStream = request.getInputStream();
-            String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+            String messageBody = StreamUtils.copyToString(inputStream, UTF_8);
             loginForm = objectMapper.readValue(messageBody, LoginForm.class);
         }
         catch (IOException e) {

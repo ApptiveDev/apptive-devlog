@@ -1,9 +1,6 @@
-package apptive.devlog.member;
+package apptive.devlog.member.exception;
 
 import apptive.devlog.error.ErrorMessage;
-import apptive.devlog.member.exception.DuplicateMemberException;
-import apptive.devlog.member.exception.NotFoundMemberException;
-import apptive.devlog.member.exception.PasswordException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -46,4 +43,5 @@ public class MemberExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message",ex.getMessage()));
     }
+
 }
