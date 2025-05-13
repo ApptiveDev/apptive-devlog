@@ -12,5 +12,7 @@ public class UploadFileDto {
 
     private String fileName;
 
+    private String serverFileName;
+
     private String url;
 }

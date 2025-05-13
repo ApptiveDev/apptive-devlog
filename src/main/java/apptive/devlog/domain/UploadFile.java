@@ -17,8 +17,14 @@ public class UploadFile {
     @Column(name = "file_id")
     private Long id;
 
+    @Column(nullable = false)
     private String fileName;
 
+    @Column(nullable = false)
+    private String serverFileName;
+
+    @Column(nullable = false, length = 65535)
+    @Lob
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,8 +35,9 @@ public class UploadFile {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public UploadFile(String fileName, String url, Post post, Member member) {
+    public UploadFile(String fileName, String serverFileName, String url, Post post, Member member) {
         this.fileName = fileName;
+        this.serverFileName = serverFileName;
         this.url = url;
         this.post = post;
         this.member = member;

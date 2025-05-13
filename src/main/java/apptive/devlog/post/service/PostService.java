@@ -18,7 +18,6 @@ import apptive.devlog.post.exception.BadPostRequestException;
 import apptive.devlog.post.exception.NotFoundPostException;
 import apptive.devlog.post.repository.PostRepository;
 import apptive.devlog.post.repository.QPageRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -118,7 +117,7 @@ public class PostService {
     private void uploadFiles(CreatePostRequest post, Member findMember, Post saved) {
         List<UploadFile> uploadFiles = new ArrayList<>();
         for (UploadFileDto file : post.getFiles()) {
-            uploadFiles.add(new UploadFile(file.getFileName(), file.getUrl(), saved, findMember));
+            uploadFiles.add(new UploadFile(file.getFileName(), file.getServerFileName(), file.getUrl(), saved, findMember));
         }
 
         uploadRepository.saveAll(uploadFiles);
