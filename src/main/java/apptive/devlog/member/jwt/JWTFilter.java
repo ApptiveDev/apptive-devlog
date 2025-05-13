@@ -25,11 +25,13 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = request.getHeader("access");
 
-        if (accessToken == null) {
+        String requestURI = request.getRequestURI();
+
+        if (accessToken == null || requestURI.equals("/login") || requestURI.equals("/reissue")
+                || requestURI.equals("/connect/**") || requestURI.equals("/users")) {
             filterChain.doFilter(request,response);
             return;
         }
-
         try {
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {

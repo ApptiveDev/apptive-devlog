@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -42,6 +43,6 @@ public class QCommentRepository {
                 .where(comment.post.id.eq(id).and(comment.parent.id.isNull()))
                 .fetchOne()).orElse(0L);
 
-       return new PageImpl<>(comments, pageable, count);
+        return new PageImpl<>(comments, pageable, count);
     }
 }
