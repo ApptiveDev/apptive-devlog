@@ -44,4 +44,9 @@ public class MemberExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message",ex.getMessage()));
     }
 
+    @ExceptionHandler(RefreshTokenValidateException.class)
+    public ResponseEntity<Map<String,String>> refreshTokenValidateHandler(RefreshTokenValidateException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message",ex.getMessage()));
+    }
+
 }

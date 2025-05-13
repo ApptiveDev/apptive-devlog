@@ -3,6 +3,7 @@ package apptive.devlog.member.controller;
 import apptive.devlog.domain.RefreshEntity;
 import apptive.devlog.member.jwt.JWTUtil;
 import apptive.devlog.member.repository.RefreshRepository;
+import apptive.devlog.member.service.RefreshService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,8 +24,7 @@ import java.util.Map;
 @Slf4j
 public class ReissueController {
 
-    private final JWTUtil jwtUtil;
-    private final RefreshRepository refreshRepository;
+    private final RefreshService refreshService;
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
@@ -39,49 +39,13 @@ public class ReissueController {
                 .findFirst()
                 .orElse(null);
 
-        if (refresh == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "리프래시 토큰이 존재하지 않습니다"));
-        }
+        String[] tokens = refreshService.validateRefreshToken(refresh);
 
-        try {
-            jwtUtil.isExpired(refresh);
-        } catch (ExpiredJwtException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "리프래시 토큰이 만료되었습니다."));
-        }
-
-        String category = jwtUtil.getCategory(refresh);
-
-
-        if (!category.equals("refresh")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "리프래시 토큰이 아닙니다."));
-        }
-
-        if(!refreshRepository.existsByRefresh(refresh)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "잘못된 리프래시 토큰입니다."));
-        }
-
-        String email = jwtUtil.getUsername(refresh);
-        String role = jwtUtil.getRole(refresh);
-
-        String access = jwtUtil.createJWT("access", email, role, 600000L);
-        String newRefresh = jwtUtil.createJWT("refresh", email, role, 86400000L);
-
-        refreshRepository.deleteByEmail(email);
-        addRefreshEntity(email, newRefresh, 86400000L);
-
-        response.setHeader("access", access);
-        response.addCookie(createCookie("refresh",newRefresh));
+        response.setHeader("access", tokens[0]);
+        response.addCookie(createCookie("refresh",tokens[1]));
 
         return new ResponseEntity<>(HttpStatus.OK);
 
-    }
-
-    private void addRefreshEntity(String email, String refresh, Long expiredMs) {
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-
-        RefreshEntity refreshEntity = new RefreshEntity(email, refresh, date.toString());
-
-        refreshRepository.save(refreshEntity);
     }
 
     private Cookie createCookie(String key, String value) {
