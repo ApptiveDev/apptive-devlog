@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 public class Member extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -41,6 +41,12 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UploadFile> uploadFiles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toMember", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> followerList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> followingList = new ArrayList<>();
 
 
     public Member(String email, String password, String username, String nickname, LocalDate birthdate, String role, Gender gender) {

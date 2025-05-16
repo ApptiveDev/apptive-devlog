@@ -63,7 +63,6 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests((auth)->
                 auth.requestMatchers(permitPaths).permitAll()
-                        .requestMatchers("/users/me/**").authenticated()
                         .requestMatchers("/home").hasRole("MEMBER")//ROLE_MEMBER
                         .anyRequest().authenticated());
 
@@ -101,8 +100,6 @@ public class WebSecurityConfig {
             "/webjars/**",
             "/users/post/*",
             "/users/comment/*",
-            "/upload",
-            "/file/upload",
             "/users/*/post/**"};
 
 

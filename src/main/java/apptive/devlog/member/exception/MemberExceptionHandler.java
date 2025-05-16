@@ -49,4 +49,5 @@ public class MemberExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message",ex.getMessage()));
     }
 
+
 }

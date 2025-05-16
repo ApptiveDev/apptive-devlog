@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class RefreshEntity {
+public class RefreshEntity extends BaseTimeEntity{
 
     @Id @GeneratedValue
     Long id;

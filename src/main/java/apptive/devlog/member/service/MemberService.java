@@ -41,7 +41,7 @@ public class MemberService implements UserDetailsService {
         return new MemberDetails(findMember);
     }
 
-    public void join(JoinForm form) {
+    public Member join(JoinForm form) {
         String password = passwordEncoder.encode(form.getPassword());
 
         HashMap<String, String> errors = new HashMap<>();
@@ -58,7 +58,7 @@ public class MemberService implements UserDetailsService {
         Member member = new Member(form.getEmail(), password, form.getUsername(), form.getNickname(),
                 form.getBirthdate(), "ROLE_MEMBER", form.getGender());
 
-        memberRepository.save(member);
+        return memberRepository.save(member);
     }
 
     public void update(String email, MemberUpdateForm form) {
