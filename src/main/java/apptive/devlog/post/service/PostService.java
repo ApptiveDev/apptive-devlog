@@ -49,7 +49,7 @@ public class PostService {
                 .orElseThrow(() -> new NotFoundMemberException("존재하지 않는 회원입니다"));
         Post saved = postRepository.save(new Post(post.getTitle(), post.getContent(), findMember));
 
-        uploadFiles(post, findMember, saved);
+        uploadFiles(post.getFiles(), findMember, saved);
 
         return new PostResponse(saved, findMember.getNickname());
     }
@@ -76,9 +76,18 @@ public class PostService {
         if (!findMember.getEmail().equals(email))
             throw new BadPostRequestException("자신의 게시글만 수정할 수 있습니다.");
 
+        uploadFiles(post.getFiles(), findMember, findPost);
 
-        findPost.changeTitle(post.getTitle());
-        findPost.changeContent(post.getContent());
+
+        if (post.getTitle() != null) {
+            if (post.getTitle().length() >= 3 && post.getTitle().length() <= 20) findPost.changeTitle(post.getTitle());
+            else throw new BadPostRequestException("제목은 3글자 이상 20글자 이하");
+        }
+
+        if (post.getContent() != null) {
+            if (post.getContent().length() >= 3) findPost.changeContent(post.getContent());
+            else throw new BadPostRequestException("내용은 3글자 이상");
+        }
     }
 
     public PostWithCommentResponse findPost(Long id, Pageable pageable) {
@@ -114,9 +123,9 @@ public class PostService {
     }
 
 
-    private void uploadFiles(CreatePostRequest post, Member findMember, Post saved) {
+    private void uploadFiles(List<UploadFileDto> files, Member findMember, Post saved) {
         List<UploadFile> uploadFiles = new ArrayList<>();
-        for (UploadFileDto file : post.getFiles()) {
+        for (UploadFileDto file : files) {
             uploadFiles.add(new UploadFile(file.getFileName(), file.getServerFileName(), file.getUrl(), saved, findMember));
         }
 

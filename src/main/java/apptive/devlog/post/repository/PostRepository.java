@@ -12,8 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findByMember(Member member);
 
     @Query("select distinct p from Post p left join fetch p.files join fetch p.member where p.id = :id")
     Optional<Post> findWithFiles(Long id);
+
+    @Query("select p from Post p join fetch p.member where p.id = :id")
+    Optional<Post> findWithMember(Long id);
 }

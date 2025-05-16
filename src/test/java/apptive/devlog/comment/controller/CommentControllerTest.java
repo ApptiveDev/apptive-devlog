@@ -99,7 +99,7 @@ class CommentControllerTest {
 
         CommentRequest updateComment = new CommentRequest("수정된 댓글");
 
-        mockMvc.perform(patch("/users/me/comment/{id}",savedComment.getId())
+        mockMvc.perform(put("/users/me/comment/{id}",savedComment.getId())
                 .header("access", accessToken)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(updateComment))

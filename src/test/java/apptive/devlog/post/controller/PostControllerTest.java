@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +93,21 @@ class PostControllerTest {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(updatePostRequest))
         ).andExpect(status().isOk());
+    }
+
+    @Test
+    void updatePostFail() throws Exception {
+        String accessToken = makeAccessToken();
+        CreatePostRequest post = new CreatePostRequest("제목1", "내용1");
+        PostResponse response = postService.save(post,"ljw2109@naver.com");
+        UpdatePostRequest updatePostRequest = new UpdatePostRequest("실패", "실패");
+
+
+        mockMvc.perform(patch("/users/me/post/{id}", response.getId())
+                .header("access", accessToken)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(updatePostRequest))
+        ).andExpect(status().isBadRequest());
     }
 
     @Test

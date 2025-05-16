@@ -1,7 +1,6 @@
 package apptive.devlog.post.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import apptive.devlog.fileupload.dto.UploadFileDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,13 +14,11 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UpdatePostRequest {
 
-    @NotBlank
     String title;
 
-    @NotBlank
     String content;
 
-    List<String> fileUrls = new ArrayList<>();
+    List<UploadFileDto> files = new ArrayList<>();
 
     public UpdatePostRequest(String title, String content) {
         this.title = title;
