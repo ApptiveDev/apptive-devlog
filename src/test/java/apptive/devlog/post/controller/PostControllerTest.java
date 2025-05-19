@@ -62,7 +62,7 @@ class PostControllerTest {
 
         CreatePostRequest post = new CreatePostRequest("제목1", "내용1", new ArrayList<>());
 
-        mockMvc.perform(post("/users/me/post")
+        mockMvc.perform(post("/posts")
                 .contentType("application/json").content(objectMapper.writeValueAsString(post))
                 .header("access", access))
                 .andExpect(status().isCreated());
@@ -75,7 +75,7 @@ class PostControllerTest {
 
         PostResponse response = postService.save(post, member.getEmail());
 
-        mockMvc.perform(get("/users/post/{id}",  response.getId()))
+        mockMvc.perform(get("/posts/{id}",  response.getId()))
                 .andExpect(status().isOk());
 
     }
@@ -88,7 +88,7 @@ class PostControllerTest {
         UpdatePostRequest updatePostRequest = new UpdatePostRequest("제목2", "내용2");
 
 
-        mockMvc.perform(patch("/users/me/post/{id}", response.getId())
+        mockMvc.perform(patch("/posts/{id}", response.getId())
                 .header("access", accessToken)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(updatePostRequest))
@@ -103,7 +103,7 @@ class PostControllerTest {
         UpdatePostRequest updatePostRequest = new UpdatePostRequest("실패", "실패");
 
 
-        mockMvc.perform(patch("/users/me/post/{id}", response.getId())
+        mockMvc.perform(patch("/posts/{id}", response.getId())
                 .header("access", accessToken)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(updatePostRequest))
@@ -116,7 +116,7 @@ class PostControllerTest {
         CreatePostRequest post = new CreatePostRequest("제목1", "내용1");
         PostResponse response = postService.save(post,"ljw2109@naver.com");
 
-        mockMvc.perform(delete("/users/me/post/{id}" ,response.getId())
+        mockMvc.perform(delete("/posts/{id}" ,response.getId())
                 .header("access", accessToken))
                 .andExpect(status().isNoContent());
     }
@@ -128,7 +128,7 @@ class PostControllerTest {
         JoinForm joinForm = joinTestCase();
         memberService.join(joinForm);
 
-        mockMvc.perform(get("/users/{nickname}/post", joinForm.getNickname())
+        mockMvc.perform(get("/users/{nickname}/posts", joinForm.getNickname())
                         .contentType("application/json")
                 )
                 .andExpect(status().isOk());

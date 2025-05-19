@@ -61,7 +61,7 @@ class CommentControllerTest {
 
         CommentRequest comment = new CommentRequest("댓글1");
 
-        mockMvc.perform(post("/users/me/post/{id}/comment", response.getId())
+        mockMvc.perform(post("/posts/{id}/comments", response.getId())
                 .header("access", accessToken)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(comment)))
@@ -80,7 +80,7 @@ class CommentControllerTest {
 
         CommentResponse savedComment = commentService.saveComment(comment, response.getId(), "ljw2109@naver.com");
 
-        mockMvc.perform(delete("/users/me/comment/{id}",savedComment.getId())
+        mockMvc.perform(delete("/comments/{id}",savedComment.getId())
             .header("access", accessToken)
         ).andExpect(status().isNoContent());
     }
@@ -99,7 +99,7 @@ class CommentControllerTest {
 
         CommentRequest updateComment = new CommentRequest("수정된 댓글");
 
-        mockMvc.perform(put("/users/me/comment/{id}",savedComment.getId())
+        mockMvc.perform(put("/comments/{id}",savedComment.getId())
                 .header("access", accessToken)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(updateComment))

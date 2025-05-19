@@ -16,13 +16,12 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users/me")
 public class CommentController {
 
     private final CommentService commentService;
     private final MailService mailService;
 
-    @PostMapping("/post/{id}/comment")
+    @PostMapping("/posts/{id}/comments")
     public ResponseEntity<CommentResponse> createComment(@Valid @RequestBody CommentRequest comment,
                                                             @PathVariable Long id,
                                                             @AuthenticationPrincipal MemberDetails member) {
@@ -33,7 +32,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("/post/{postId}/comment/{commentId}")
+    @PostMapping("/posts/{postId}/comments/{commentId}")
     public ResponseEntity<CommentResponse> createReComment(@Valid @RequestBody CommentRequest comment,
                                                                @PathVariable Long postId, @PathVariable Long commentId,
                                                                @AuthenticationPrincipal MemberDetails member) {
@@ -45,7 +44,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @DeleteMapping("/comment/{id}")
+    @DeleteMapping("/comments/{id}")
     public ResponseEntity<Map<String, String>> deleteComment(@PathVariable Long id,
                                                              @AuthenticationPrincipal MemberDetails member) {
         commentService.deleteComment(id, member.getUsername());
@@ -54,7 +53,7 @@ public class CommentController {
     }
 
 
-    @PutMapping("/comment/{id}")
+    @PutMapping("/comments/{id}")
     public ResponseEntity<Map<String, String>> updateComment(@Valid @RequestBody CommentRequest request, @PathVariable Long id,
                                            @AuthenticationPrincipal MemberDetails member) {
         commentService.updateComment(request, id, member.getUsername());

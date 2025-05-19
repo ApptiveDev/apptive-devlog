@@ -22,12 +22,11 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
 public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("/me/post")
+    @PostMapping("/posts")
     public ResponseEntity<PostResponse> createPost(@Valid @RequestBody CreatePostRequest post,
                                                    @AuthenticationPrincipal MemberDetails memberDetails) {
         PostResponse response = postService.save(post, memberDetails.getMember().getEmail());
@@ -41,7 +40,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(response);
     }
 
-    @PatchMapping("/me/post/{id}")
+    @PatchMapping("/posts/{id}")
     public ResponseEntity<Map<String,String>> updatePost(@Valid @RequestBody UpdatePostRequest post,
                                                          @PathVariable Long id,
                                                          @AuthenticationPrincipal MemberDetails member) {
@@ -49,7 +48,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message","게시글 수정 성공"));
     }
 
-    @DeleteMapping("/me/post/{id}")
+    @DeleteMapping("/posts/{id}")
     public ResponseEntity<Map<String,String>> deletePost(@AuthenticationPrincipal MemberDetails member,
                                                          @PathVariable Long id) {
         postService.deletePost(id,member.getUsername());
@@ -58,14 +57,14 @@ public class PostController {
     }
 
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/posts/{id}")
     public ResponseEntity<PostWithCommentResponse> getPost(@PathVariable Long id, @PageableDefault(page=0, size = 20) Pageable pageable) {
         PostWithCommentResponse post = postService.findPost(id, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(post);
     }
 
 
-    @GetMapping("/{nickname}/post")
+    @GetMapping("/users/{nickname}/posts")
     public ResponseEntity<PostPageResponse> memberPosts(@PathVariable String nickname,
                                                         @RequestParam(required = false) String title,
                                                         @PageableDefault(page=0, size = 10) Pageable pageable) {

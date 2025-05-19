@@ -21,4 +21,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     @Query("select f from Follow f join fetch f.toMember where f.fromMember = :member and f.isAccepted=true ")
     List<Follow> findFollowings(Member member);
+
+    @Query("select f from Follow f where f.toMember = :toMember and f.fromMember = :fromMember")
+    Optional<Follow> findByMembers(Member toMember, Member fromMember);
 }

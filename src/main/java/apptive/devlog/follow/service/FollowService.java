@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,6 +30,12 @@ public class FollowService {
                 .orElseThrow(() -> new NotFoundMemberException("존재하는 회원이 없습니다"));
 
         if (toMember.getId().equals(fromMember.getId())) throw new BadFollowRequestException("자기 자신을 팔로우할 수 없습니다.");
+
+        Optional<Follow> follow = followRepository.findByMembers(toMember, fromMember);
+        if (follow.isPresent()) {
+            if (follow.get().isAccepted()) throw new BadFollowRequestException("이미 팔로우한 대상입니다.");
+            else throw new BadFollowRequestException("중복된 팔로우 요청은 불가능합니다.");
+        }
 
         return followRepository.save(new Follow(fromMember, toMember, false));
     }

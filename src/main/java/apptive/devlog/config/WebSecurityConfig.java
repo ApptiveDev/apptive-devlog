@@ -63,6 +63,7 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests((auth)->
                 auth.requestMatchers(permitPaths).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/posts/*", "/users/*/posts/**").permitAll()
                         .requestMatchers("/home").hasRole("MEMBER")//ROLE_MEMBER
                         .anyRequest().authenticated());
 
@@ -98,9 +99,7 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/webjars/**",
-            "/users/post/*",
-            "/users/comment/*",
-            "/users/*/post/**"};
+            };
 
 
 }
