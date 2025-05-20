@@ -31,10 +31,21 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	//runtimeOnly 'com.mysql:mysql-connector-j'
 
+	// h2
+	implementation 'com.h2database:h2'
+
 	// validation
 	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 	implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
 
+	// spring security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+	// java mail sender
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

@@ -29,7 +29,7 @@
             <input type="email" id="email" th:field="*{email}"
                    th:errorclass="field-error"
                    class="form-control" placeholder="이메일 입력">
-            <div class="field-error" th:erros="*{email}">
+            <div class="field-error" th:errors="*{email}">
                 이메일 오류
             </div>
         </div>
@@ -40,7 +40,7 @@
             <input type="password" id="password" th:field="*{password}"
                    th:errorclass="field-error"
                    class="form-control" placeholder="비밀번호 입력">
-            <div class="field-error" th:erros="*{password}">
+            <div class="field-error" th:errors="*{password}">
                 비밀번호 오류
             </div>
         </div>
@@ -48,10 +48,10 @@
         <!-- 이름 -->
         <div>
             <label for="name">이름</label>
-            <input type="text" id="name" th:field="${name}"
+            <input type="text" id="name" th:field="*{name}"
                    th:errorclass="field-error"
                    class="form-control" placeholder="이름 입력">
-            <div class="field-error" th:erros="*{name}">
+            <div class="field-error" th:errors="*{name}">
                 이름 오류
             </div>
         </div>
@@ -59,10 +59,10 @@
         <!-- 닉네임 -->
         <div>
             <label for="nickname">닉네임</label>
-            <input type="text" id="nickname" th:field="${nickname}"
+            <input type="text" id="nickname" th:field="*{nickname}"
                    th:errorclass="field-error"
                    class="form-control" placeholder="닉네임 입력">
-            <div class="field-error" th:erros="*{nickname}">
+            <div class="field-error" th:errors="*{nickname}">
                 닉네임 오류
             </div>
         </div>
@@ -70,10 +70,10 @@
         <!-- 생년월일 -->
         <div>
             <label for="birth">생년월일</label>
-            <input type="date" id="birth" th:field="${birth}"
+            <input type="date" id="birth" th:field="*{birth}"
                    th:errorclass="field-error"
                    class="form-control">
-            <div class="field-error" th:erros="*{birth}">
+            <div class="field-error" th:errors="*{birth}">
                 생년월일 오류
             </div>
         </div>
@@ -83,14 +83,14 @@
             <label>성별</label><br>
             <input type="radio" id="male" name="gender"
                    th:errorclass="field-error"
-                   th:field="*{gender}" value="male">
+                   th:field="*{gender}" value="MALE">
             <label for="male">남</label>
 
             <input type="radio" id="female" name="gender"
                    th:errorclass="field-error"
-                   th:field="*{gender}" value="female">
+                   th:field="*{gender}" value="FEMALE">
             <label for="female">여</label>
-            <div class="field-error" th:erros="*{gender}">
+            <div class="field-error" th:errors="*{gender}">
                 성별 오류
             </div>
         </div>
