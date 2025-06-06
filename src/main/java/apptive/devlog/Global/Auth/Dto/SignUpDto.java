@@ -1,6 +1,6 @@
 package apptive.devlog.Global.Auth.Dto;
 
-import apptive.devlog.Global.Enum.Gender;
+import apptive.devlog.Member.Enum.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 @Getter

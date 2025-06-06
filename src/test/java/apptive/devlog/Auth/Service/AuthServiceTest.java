@@ -5,7 +5,7 @@ import apptive.devlog.Global.Auth.Jwt.JwtTokenProvider;
 import apptive.devlog.Global.Auth.Service.AuthService;
 import apptive.devlog.Global.Auth.Service.AuthServiceImpl;
 import apptive.devlog.Global.Auth.Validator.PasswordValidator;
-import apptive.devlog.Global.Enum.Gender;
+import apptive.devlog.Member.Enum.Gender;
 import apptive.devlog.Global.Exception.InvalidTokenException;
 import apptive.devlog.Global.Exception.MemberAlreadyLogoutException;
 import apptive.devlog.Global.Exception.MemberNotExistException;

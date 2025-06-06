@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolation; // Bean Validation 제약 조건 
 import lombok.AccessLevel;
 import lombok.Getter; // Lombok: getter 자동 생성
 import lombok.NoArgsConstructor; // Lombok: 기본 생성자 자동 생성
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult; // Spring Validation 결과를 담는 객체
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException; // 잘못된 타입 매핑 예외
 
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 기본 생성자를 protected로 생성
 public class ErrorResponse {
 
-    private int status;      // HTTP 상태 코드 (예: 400, 404)
+    private HttpStatus status;      // HTTP 상태 코드 (예: 400, 404)
     private String code;     // 에러 코드 문자열 (예: "INVALID_INPUT")
     private String message;  // 에러 메시지
     private List<FieldError> errors; // 필드 오류 리스트

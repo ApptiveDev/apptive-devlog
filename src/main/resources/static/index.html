@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevLog API 테스트</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DevLog API 테스트</h1>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#auth">인증</a></li>
+                <li><a href="#members">회원</a></li>
+                <li><a href="#posts">게시물</a></li>
+                <li><a href="#comments">댓글</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <section id="auth" class="api-section">
+                <h2>인증 API</h2>
+                <div class="card">
+                    <h3>로그인</h3>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginId">아이디:</label>
+                            <input type="text" id="loginId" name="loginId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">비밀번호:</label>
+                            <input type="password" id="loginPassword" name="password" required>
+                        </div>
+                        <button type="submit">로그인</button>
+                    </form>
+                    <div class="response" id="loginResponse"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>로그아웃</h3>
+                    <button id="logoutBtn">로그아웃</button>
+                    <div class="response" id="logoutResponse"></div>
+                </div>
+            </section>
+            
+            <section id="members" class="api-section">
+                <h2>회원 API</h2>
+                <div class="card">
+                    <h3>회원가입</h3>
+                    <form id="signupForm">
+                        <div class="form-group">
+                            <label for="signupEmail">이메일:</label>
+                            <input type="email" id="signupEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">비밀번호:</label>
+                            <input type="password" id="signupPassword" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupNickname">닉네임:</label>
+                            <input type="text" id="signupNickname" name="nickname" required>
+                        </div>
+                        <button type="submit">회원가입</button>
+                    </form>
+                    <div class="response" id="signupResponse"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>프로필 수정</h3>
+                    <form id="updateProfileForm">
+                        <div class="form-group">
+                            <label for="updateNickname">닉네임:</label>
+                            <input type="text" id="updateNickname" name="nickname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updatePassword">새 비밀번호:</label>
+                            <input type="password" id="updatePassword" name="password">
+                        </div>
+                        <button type="submit">프로필 수정</button>
+                    </form>
+                    <div class="response" id="updateProfileResponse"></div>
+                </div>
+            </section>
+            
+            <section id="posts" class="api-section">
+                <h2>게시물 API</h2>
+                <div class="card">
+                    <h3>게시물 작성</h3>
+                    <form id="createPostForm">
+                        <div class="form-group">
+                            <label for="postTitle">제목:</label>
+                            <input type="text" id="postTitle" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="postContent">내용:</label>
+                            <textarea id="postContent" name="content" required></textarea>
+                        </div>
+                        <button type="submit">게시물 작성</button>
+                    </form>
+                    <div class="response" id="createPostResponse"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>게시물 조회</h3>
+                    <form id="getPostForm">
+                        <div class="form-group">
+                            <label for="getPostId">게시물 ID:</label>
+                            <input type="number" id="getPostId" name="postId" required>
+                        </div>
+                        <button type="submit">게시물 조회</button>
+                    </form>
+                    <div class="response" id="getPostResponse"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>게시물 검색</h3>
+                    <form id="searchPostForm">
+                        <div class="form-group">
+                            <label for="searchType">검색 유형:</label>
+                            <select id="searchType" name="searchType">
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="tc">제목+내용</option>
+                                <option value="author">작성자</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchQuery">검색어:</label>
+                            <input type="text" id="searchQuery" name="searchQuery" required>
+                        </div>
+                        <button type="submit">검색</button>
+                    </form>
+                    <div class="response" id="searchPostResponse"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>게시물 수정</h3>
+                    <form id="updatePostForm">
+                        <div class="form-group">
+                            <label for="updatePostId">게시물 ID:</label>
+                            <input type="number" id="updatePostId" name="postId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updatePostTitle">제목:</label>
+                            <input type="text" id="updatePostTitle" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updatePostContent">내용:</label>
+                            <textarea id="updatePostContent" name="content" required></textarea>
+                        </div>
+                        <button type="submit">게시물 수정</button>
+                    </form>
+                    <div class="response" id="updatePostResponse"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>게시물 삭제</h3>
+                    <form id="deletePostForm">
+                        <div class="form-group">
+                            <label for="deletePostId">게시물 ID:</label>
+                            <input type="number" id="deletePostId" name="postId" required>
+                        </div>
+                        <button type="submit">게시물 삭제</button>
+                    </form>
+                    <div class="response" id="deletePostResponse"></div>
+                </div>
+            </section>
+            
+            <section id="comments" class="api-section">
+                <h2>댓글 API</h2>
+                <div class="card">
+                    <h3>댓글 작성</h3>
+                    <form id="createCommentForm">
+                        <div class="form-group">
+                            <label for="commentPostId">게시물 ID:</label>
+                            <input type="number" id="commentPostId" name="postId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="commentContent">내용:</label>
+                            <textarea id="commentContent" name="content" required></textarea>
+                        </div>
+                        <button type="submit">댓글 작성</button>
+                    </form>
+                    <div class="response" id="createCommentResponse"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>댓글 삭제</h3>
+                    <form id="deleteCommentForm">
+                        <div class="form-group">
+                            <label for="deleteCommentPostId">게시물 ID:</label>
+                            <input type="number" id="deleteCommentPostId" name="postId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="deleteCommentId">댓글 ID:</label>
+                            <input type="number" id="deleteCommentId" name="commentId" required>
+                        </div>
+                        <button type="submit">댓글 삭제</button>
+                    </form>
+                    <div class="response" id="deleteCommentResponse"></div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>DevLog API 테스트 인터페이스 &copy; 2024</p>
+        </footer>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html> 

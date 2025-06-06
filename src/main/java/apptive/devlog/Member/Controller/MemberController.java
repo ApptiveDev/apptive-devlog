@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -27,14 +27,14 @@ public class MemberController {
     public ResponseEntity<ResultResponse> signup(@RequestBody SignUpDto signUpDto) {
         Member member = memberService.signUp(signUpDto);
         final ResultResponse response = new ResultResponse(ResultCode.REGISTER_SUCCESS,member);
-        return new ResponseEntity<>(response,HttpStatus.valueOf(ResultCode.REGISTER_SUCCESS.getStatus()));
+        return new ResponseEntity<>(response,response.getStatus());
     }
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<ResultResponse> updateProfile(@RequestBody UpdateProfileRequest updateProfileRequest,@RequestHeader("Authorization") String authorizationHeader) throws AccessDeniedException {
         String token = authorizationHeader.replace("Bearer ", "");
         memberService.updateProfile(new UpdateProfileDto(updateProfileRequest.getNickname(),updateProfileRequest.getPassword(),token));
         final ResultResponse response = new ResultResponse(ResultCode.UPDATE_SUCCESS,ResultCode.UPDATE_SUCCESS.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.valueOf(ResultCode.UPDATE_SUCCESS.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 }

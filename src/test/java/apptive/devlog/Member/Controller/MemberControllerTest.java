@@ -1,8 +1,7 @@
 package apptive.devlog.Member.Controller;
 
 import apptive.devlog.Global.Auth.Dto.SignUpDto;
-import apptive.devlog.Global.Auth.Jwt.JwtTokenProvider;
-import apptive.devlog.Global.Enum.Gender;
+import apptive.devlog.Member.Enum.Gender;
 import apptive.devlog.Global.Exception.EmailDuplicationException;
 import apptive.devlog.Global.Exception.InvalidTokenException;
 import apptive.devlog.Global.Exception.MemberNotExistException;
@@ -17,7 +16,6 @@ import apptive.devlog.Member.Service.MemberServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,14 +25,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.file.AccessDeniedException;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 @WithMockUser // 테스트에서 인증된 사용자로 실행!
 @ExtendWith(MockitoExtension.class) // Mockito 확장 활성화
@@ -89,11 +85,11 @@ class MemberControllerTest {
             when(memberService.signUp(any(SignUpDto.class))).thenReturn(member);
 
             // Then: API 호출 및 검증
-            mockMvc.perform(post("/user/signup")
+            mockMvc.perform(post("/members/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(signUpDto)))
-                    .andExpect(status().isOk())
+                    .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.message").value(ResultCode.REGISTER_SUCCESS.getMessage()))
                     .andExpect(jsonPath("$.data.email").value("test@example.com"));
         }
@@ -103,11 +99,10 @@ class MemberControllerTest {
         void loginFail_InvalidInput() throws Exception {
             // Given
             // When
-            doThrow(new IllegalArgumentException("입력값 누락"))
-                    .when(memberService).signUp(any(SignUpDto.class));
+            when(memberService.signUp(any(SignUpDto.class))).thenThrow(new IllegalArgumentException("입력값 누락"));
 
             // Then
-            mockMvc.perform(post("/user/signup")
+            mockMvc.perform(post("/members/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(signUpDto)))
@@ -121,11 +116,10 @@ class MemberControllerTest {
         void loginFail_ExistId() throws Exception {
             // Given
             // When
-            doThrow(new EmailDuplicationException())
-                    .when(memberService).signUp(any(SignUpDto.class));
+            when(memberService.signUp(any(SignUpDto.class))).thenThrow(new EmailDuplicationException());
 
             // Then
-            mockMvc.perform(post("/user/signup")
+            mockMvc.perform(post("/members/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(signUpDto)))
@@ -138,11 +132,10 @@ class MemberControllerTest {
         void loginFail_ExistNickname() throws Exception {
             // Given
             // When
-            doThrow(new NicknameDuplicationException())
-                    .when(memberService).signUp(any(SignUpDto.class));
+            when(memberService.signUp(any(SignUpDto.class))).thenThrow(new NicknameDuplicationException());
 
             // Then
-            mockMvc.perform(post("/user/signup")
+            mockMvc.perform(post("/members/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(signUpDto)))
@@ -155,11 +148,10 @@ class MemberControllerTest {
         void loginFail_InvalidPw() throws Exception {
             // Given
             // When
-            doThrow(new IllegalArgumentException("비밀번호가 유효하지 않습니다."))
-                    .when(memberService).signUp(any(SignUpDto.class));
+            when(memberService.signUp(any(SignUpDto.class))).thenThrow(new IllegalArgumentException("비밀번호가 유효하지 않습니다."));
 
             // Then
-            mockMvc.perform(post("/user/signup")
+            mockMvc.perform(post("/members/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(signUpDto)))
@@ -172,11 +164,10 @@ class MemberControllerTest {
         void loginFail_Birth() throws Exception {
             // Given
             // When
-            doThrow(new IllegalArgumentException("Invalid date format"))
-                    .when(memberService).signUp(any(SignUpDto.class));
+            when(memberService.signUp(any(SignUpDto.class))).thenThrow(new IllegalArgumentException("Invalid date format"));
 
             // Then
-            mockMvc.perform(post("/user/signup")
+            mockMvc.perform(post("/members/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(signUpDto)))
@@ -202,7 +193,7 @@ class MemberControllerTest {
             doNothing().when(memberService).updateProfile(any(UpdateProfileDto.class));
 
             // Then: API 호출 및 검증 (컨트롤러는 성공 시 ResultResponse를 반환)
-            mockMvc.perform(post("/user/update")
+            mockMvc.perform(patch("/members/update")
                             .with(csrf())
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -223,7 +214,7 @@ class MemberControllerTest {
             doThrow(new InvalidTokenException())
                     .when(memberService).updateProfile(any(UpdateProfileDto.class));
 
-            mockMvc.perform(post("/user/update")
+            mockMvc.perform(patch("/members/update")
                             .with(csrf())
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -244,7 +235,7 @@ class MemberControllerTest {
             doThrow(new MemberNotExistException())
                     .when(memberService).updateProfile(any(UpdateProfileDto.class));
 
-            mockMvc.perform(post("/user/update")
+            mockMvc.perform(patch("/members/update")
                             .with(csrf())
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -264,7 +255,7 @@ class MemberControllerTest {
             doThrow(new IllegalArgumentException("수정된 정보는 공백일 수 없습니다."))
                     .when(memberService).updateProfile(any(UpdateProfileDto.class));
 
-            mockMvc.perform(post("/user/update")
+            mockMvc.perform(patch("/members/update")
                             .with(csrf())
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)

@@ -5,7 +5,6 @@ import apptive.devlog.Global.Auth.Service.AuthService;
 import apptive.devlog.Global.Response.Result.ResultCode;
 import apptive.devlog.Global.Response.Result.ResultResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,7 @@ public class AuthController {
     public ResponseEntity<ResultResponse> login(@RequestBody LoginRequestDto loginRequestDto){
         authService.login(loginRequestDto);
         final ResultResponse response = new ResultResponse(ResultCode.LOGIN_SUCCESS,ResultCode.LOGIN_SUCCESS.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.valueOf(ResultCode.LOGIN_SUCCESS.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @PostMapping("/logout")
@@ -27,7 +26,7 @@ public class AuthController {
         String token = authorizationHeader.replace("Bearer ", "");
         authService.logout(token);
         final ResultResponse response = new ResultResponse(ResultCode.LOGOUT_SUCCESS,ResultCode.LOGOUT_SUCCESS.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.valueOf(ResultCode.LOGOUT_SUCCESS.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @PostMapping("/withdrawal")
@@ -35,6 +34,6 @@ public class AuthController {
         String token = authorizationHeader.replace("Bearer ", "");
         authService.withdrawal(token);
         final ResultResponse response = new ResultResponse(ResultCode.DELETE_SUCCESS,ResultCode.DELETE_SUCCESS.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.valueOf(ResultCode.DELETE_SUCCESS.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 }

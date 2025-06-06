@@ -1,11 +1,12 @@
 package apptive.devlog.Global.Response.Result;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public class ResultResponse {
 
-    private int status;
+    private HttpStatus status;
     private String code;
     private String message;
     private Object data;

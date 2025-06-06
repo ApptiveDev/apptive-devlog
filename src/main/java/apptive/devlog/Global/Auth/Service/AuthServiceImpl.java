@@ -2,7 +2,6 @@ package apptive.devlog.Global.Auth.Service;
 
 import apptive.devlog.Global.Auth.Dto.LoginRequestDto;
 import apptive.devlog.Global.Auth.Jwt.JwtTokenProvider;
-import apptive.devlog.Global.Exception.InvalidRequestException;
 import apptive.devlog.Global.Exception.InvalidTokenException;
 import apptive.devlog.Global.Exception.MemberAlreadyLogoutException;
 import apptive.devlog.Global.Exception.MemberNotExistException;

@@ -1,7 +1,7 @@
 package apptive.devlog.Member.Domain;
 
 import apptive.devlog.Global.Auth.Attribute.Provider;
-import apptive.devlog.Global.Enum.Gender;
+import apptive.devlog.Member.Enum.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,13 +28,17 @@ public class Member {
     private String nickname;
     @Column(name = "birth", nullable = false)
     private LocalDate birth;
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender", nullable = false, columnDefinition = "VARCHAR(20)")
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     @Column(name = "password")
     private String password;
 
     @Column(name = "provider", nullable = false)
     private Provider provider;
+
+    @Column(name = "mail_opt_out", nullable = false)
+    private boolean mailOptOut = false;
 
     public Member(String email, String name, String nickname, LocalDate birth, Gender gender, String encodePwd) {
         this.email = email;
@@ -66,6 +70,18 @@ public class Member {
     @Override
     public int hashCode() {
         return Objects.hash(email, password);
+    }
+
+    public boolean isMailOptOut() {
+        return mailOptOut;
+    }
+
+    public void setMailOptOut(boolean mailOptOut) {
+        this.mailOptOut = mailOptOut;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 }
 

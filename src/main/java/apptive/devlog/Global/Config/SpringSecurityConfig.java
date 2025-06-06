@@ -49,8 +49,8 @@ public class SpringSecurityConfig {
                 .sessionManagement(c ->
                         c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용하지 않음
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/signup").permitAll() // 회원가입은 누구나 접근 가능하도록 수정!
-                        .requestMatchers("/user/**").authenticated() // 멤버만 사용가능하도록 통제
+                        .requestMatchers("/members/**").authenticated() // 멤버만 사용가능하도록 통제
+                        .requestMatchers("/members/signup").permitAll() // 회원가입은 누구나 접근 가능하도록 수정!
                         .anyRequest().permitAll()
                 )
                 .exceptionHandling(ex -> ex
